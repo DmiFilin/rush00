@@ -4,6 +4,7 @@ session_start();
 $_SESSION['error'] = 0;
 $_SESSION['success'] = 0;
 $_SESSION['status'] = 0;
+$_SESSION['status2'] = 0;
 if ($_SESSION['login'] == NULL || $_SESSION['is_adm'] != 1) {
     header('Location: index.php');
     return;
@@ -32,12 +33,14 @@ elseif ($_POST['name'] != NULL && $_POST['submit'] == "Delete product"){
     else
         $_SESSION['success'] = 4;
 }
-elseif ($_POST['name'] != NULL && $_POST['submit'] == "Modify product"){
-	if (admin_del_product_from_db($_POST['name']) === false)
+elseif ($_POST['name'] != NULL && $_POST['submit'] == "Modify product")
 		$_SESSION['status'] = 1;
-	else
-		$_SESSION['status'] = 0;
-}
+elseif ($_POST['name'] != NULL && $_POST['submit'] == "Modify user")
+		$_SESSION['status'] = 1;
+elseif ( $_POST['submit'] == "Modif user")
+    modif_user();
+elseif ( $_POST['submit'] == "Modif product")
+	check_product();
 ?>
 <html lang="en">
 <head>
@@ -139,6 +142,25 @@ elseif ($_POST['name'] != NULL && $_POST['submit'] == "Modify product"){
                 ?>
 			</form>
 		</div>
+		<?php if ($_SESSION['status2'] == 0)
+			echo (' <div class="form">
+            <form class="register_form" method="post" action="admin.php">
+                <h1>Modify user</h1>
+                <input type="text" name="login" value="" placeholder="login">
+                <input class="sss" type="submit" name="submit" value="Modify user">
+            </form>
+        </div>');
+        elseif ($_SESSION['status2'] == 1)
+			echo ('<div class="form">
+			<form class="register_form" method="post" action="admin.php">
+				<h1>Modify user</h1>
+				<input type="text" name="login" value="" placeholder="login">
+				<input type="password" name="passwd" value="" placeholder="password">
+				<input type="text" name="status" value="" placeholder="status">
+				<input class="sss" type="submit" name="submit" value="Modif user">
+			</form>
+		</div>');
+		?>
 	</div>
 	<br />
 	<div>
@@ -190,7 +212,7 @@ elseif ($_POST['name'] != NULL && $_POST['submit'] == "Modify product"){
                 <input type="text" name="category" value="" placeholder="category">
 				<input type="text" name="count" value="" placeholder="count">
                 <input type="text" name="description" value="" placeholder="description">
-				<input class="sss" type="submit" name="submit" value="Add product">
+				<input class="sss" type="submit" name="submit" value="Modif product">
 			</form>
 		</div>');
 		?>
