@@ -1,5 +1,13 @@
 <?php
 include 'install.php';
+session_start();
+init_bd();
+//admin_del_product_from_db("boots_of_travel");
+admin_add_products_in_db("boots_of_travel", "100", "srcs/img/boots_of_travel.jpg", "boots");
+admin_add_products_in_db("arcane_boots", "40", "srcs/img/arcane_boots.jpg", "boots");
+admin_add_products_in_db("boots_of_travel", "100", "srcs/img/bootswer", "boots");
+admin_add_user("admin", "admin", 1);
+admin_add_user("kto", "kto", 0);
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -10,40 +18,8 @@ include 'install.php';
 </head>
 <?php require "header.php"; ?>
 <body>
-<div class="menu">
-    <div class="dropdown">
-        <a href="index.php"><button class="one">Main</button></a>
-    </div>
-    <div class="dropdown">
-        <button class="two">Categories</button>
-        <div class="dropdown-content">
-            <a href="#">T</a>
-            <a href="#">O</a>
-            <a href="#">P</a>
-        </div>
-    </div>
-    <div class="dropdown">
-        <a href="index.html"><button class="three">Sign in</button></a>
-    </div>
-    <div class="dropdown">
-        <a href="#"><button class="four">Basket</button></a>
-    </div>
-</div>
 <div class="products">
-    <div class="form">
-        <form action="" method="get">
-            <input type="image" src="srcs/img/boots_of_travel.jpg" alt="boots_of_travel" width="300px" height="300px">
-            <br/>
-            <input type="submit" name="submit" value="OK">
-        </form>
-    </div>
-    <div class="form">
-        <form action="" method="get">
-            <input type="image" src="srcs/img/arcane_boots.jpg" alt="boots_of_travel" width="300px" height="300px">
-            <br/>
-            <input type="submit" name="submit" value="OK">
-        </form>
-    </div>
+    <?php display_products() ?>
 </div>
 <!--<div class="categories">-->
 <!--    <a href="#"><div class="img">-->
@@ -68,3 +44,11 @@ include 'install.php';
 
 </footer>
 </html>
+<!--<div class="form">-->
+<!--    <form action="" method="get">-->
+<!--        <input type="image" src="srcs/img/arcane_boots.jpg" alt="boots_of_travel" width="310px" height="300px">-->
+<!--        <br/>-->
+<!--        <p class="price">Price: 100</p>-->
+<!--        <input class="add_product" type="submit" name="submit" value="Add product">-->
+<!--    </form>-->
+<!--</div>-->
