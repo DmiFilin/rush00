@@ -3,6 +3,7 @@ include 'install.php';
 session_start();
 $_SESSION['error'] = 0;
 $_SESSION['success'] = 0;
+$_SESSION['status'] = 0;
 if ($_SESSION['login'] == NULL || $_SESSION['is_adm'] != 1) {
     header('Location: index.php');
     return;
@@ -20,16 +21,22 @@ elseif ($_POST['login'] != NULL && $_POST['submit'] == "Delete user") {
         $_SESSION['success'] = 2;
 }
 elseif ($_POST['name'] != NULL && $_POST['price'] != NULL && $_POST['img'] != NULL && $_POST['submit'] == "Add product") {
-    if (admin_add_products_in_db($_POST['name'],  $_POST['price'],  $_POST['img'], $_POST['category']) === false)
+    if (admin_add_products_in_db($_POST['name'],  $_POST['price'],  $_POST['img'], $_POST['category'], $_POST['count']) === false)
         $_SESSION['error'] = 3;
     else
         $_SESSION['success'] = 3;
 }
-elseif ($_POST['name'] != NULL){
+elseif ($_POST['name'] != NULL && $_POST['submit'] == "Delete product"){
     if (admin_del_product_from_db($_POST['name']) === false)
         $_SESSION['error'] = 4;
     else
         $_SESSION['success'] = 4;
+}
+elseif ($_POST['name'] != NULL && $_POST['submit'] == "Modify product"){
+	if (admin_del_product_from_db($_POST['name']) === false)
+		$_SESSION['status'] = 1;
+	else
+		$_SESSION['status'] = 0;
 }
 ?>
 <html lang="en">
@@ -100,6 +107,9 @@ elseif ($_POST['name'] != NULL){
 <form action="logout.php" method="post">
     <input type="submit" name="logout" value="logout">
 </form>
+<form action="index.php" method="post">
+    <input type="submit" name="main" value="main">
+</form>
 <div class="window">
 	<div>
 		<h1>Manage users</h1>
@@ -140,6 +150,8 @@ elseif ($_POST['name'] != NULL){
 				<input type="text" name="price" value="" placeholder="price">
 				<input type="text" name="img" value="" placeholder="img">
                 <input type="text" name="category" value="" placeholder="category">
+				<input type="text" name="count" value="" placeholder="count">
+                <input type="text" name="description" value="" placeholder="description">
 				<input class="sss" type="submit" name="submit" value="Add product">
                 <?php if ($_SESSION['error'] == 3)
                     echo ('<p class="error_message">Error</p>');
@@ -160,6 +172,28 @@ elseif ($_POST['name'] != NULL){
                 ?>
 			</form>
 		</div>
+		<?php if ($_SESSION['status'] == 0)
+			echo (' <div class="form">
+            <form class="register_form" method="post" action="admin.php">
+                <h1>Modify product</h1>
+                <input type="text" name="name" value="" placeholder="name">
+                <input class="sss" type="submit" name="submit" value="Modify product">
+            </form>
+        </div>');
+        elseif ($_SESSION['status'] == 1)
+			echo ('<div class="form">
+			<form class="register_form" method="post" action="admin.php">
+				<h1>Modify product</h1>
+				<input type="text" name="name" value="" placeholder="name">
+				<input type="text" name="price" value="" placeholder="price">
+				<input type="text" name="img" value="" placeholder="img">
+                <input type="text" name="category" value="" placeholder="category">
+				<input type="text" name="count" value="" placeholder="count">
+                <input type="text" name="description" value="" placeholder="description">
+				<input class="sss" type="submit" name="submit" value="Add product">
+			</form>
+		</div>');
+		?>
 	</div>
 </div>
 </body>
