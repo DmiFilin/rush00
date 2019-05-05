@@ -151,10 +151,9 @@ function display_products()
         ?>
         <div class="form">
             <form action="product.php" method="get">
-                <input type="image" src="<?php echo $product['img'] ?>" alt="<?php echo $product['name'] ?>" name="<?php ?>" width="310px" height="300px">
+                <input type="image" src="<?php echo $product['img'] ?>" alt="<?php echo $product['name'] ?>" name=" <?php echo $product['name'] ?>" width="310px" height="300px">
                 <br/>
                 <p class="price">Price: <?php echo $product['price'] ?></p>
-<!--                <input class="add_product" type="submit" name="submit" value="Add product">-->
             </form>
             <form action="" method="get">
                 <input class="add_product" type="submit" name="submit" value="Add product">
