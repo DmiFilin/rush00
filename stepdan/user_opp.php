@@ -1,6 +1,5 @@
 <?php
 
-
 	function user_login_check($user_name, $user_pass, $db_init)
 	{
 		if ($user_name && $user_pass)
@@ -17,7 +16,6 @@
 		else
 		header("Location: auth.php?error=Incorrect login or password");
 	}
-
 
 	function user_add($user_name, $user_pass, $db_init)
 	{
@@ -39,7 +37,6 @@
 		else
 			header("Location: register.php?error=Incorrect password or login");
 	}
-
 
 	function a_user_del($user_name, $db_init)
 	{
@@ -75,7 +72,7 @@
 			$result = mysqli_query($db_init, "SELECT id FROM users WHERE login='$user_name'");
 			$myrow = mysqli_fetch_array($result);
 			if (!empty($myrow['id']))
-			header("Location: admin.php?error=The login is already exist");
+				header("Location: admin.php?error=The login is already exist");
 			else
 			{
 				$a_status = ($a_status == 'on') ? 1: 0;
@@ -90,6 +87,22 @@
 			header("Location: admin.php?error=Incorrect password or login");
 	}
 
+	function u_modify($user_name, $user_pass, $a_status, $db_init)
+	{
+		if ($user_name && $user_pass)
+		{
+			$id = $_COOKIE['user_mod_id'];
+			$a_status = ($a_status == 'on') ? 1: 0;
+			$result = mysqli_query($db_init, "UPDATE users SET login='$user_name', password='$user_pass', a_status='$a_status' WHERE id = $id;");
+			if ($result == 'TRUE')
+				header("Location: admin.php?sucess=You are now registered");
+			else
+				header("Location: admin.php?error=Some errors. User didnt added");
+		}
+		else
+			header("Location: modify.php?error=Incorrect password or login");
+	}
+
 		include ("db_init.php");
 		if (!$db_init)
 			echo "cant connect to data base: " . mysqli_connect_error();
@@ -101,6 +114,8 @@
 			a_user_add($_POST['login'], $_POST['passwd'], $_POST['a_status'], $db_init);
 		else if ($_GET['opp'] == 'a_del')
 			a_user_del($_POST['login'], $db_init);
+		else if ($_GET['opp'] == 'modify')
+			u_modify($_POST['login'], $_POST['passwd'], $_POST['a_status'], $db_init);
 		else
 			header("Location: auth.php.php");
 		mysqli_close($db_init);
