@@ -31,7 +31,7 @@ button {
 div.dropdown {
     /*padding: -50px;*/
     display: inline-block;
-    width: 24%;
+    width: 19%;
     height: 30%;
     color: white;
     position: relative;
@@ -177,6 +177,28 @@ form {
     padding: 15px;
     box-sizing: border-box;
     font-size: 14px;
+}
+
+.add_product2 {
+    font-family: "Roboto", sans-serif;
+    outline: 0;
+    /*background: #f2f2f2;*/
+    /*width: 100%;*/
+    border: 0;
+    padding: 15px;
+    box-sizing: border-box;
+    font-size: 25px;
+    margin: 0;
+    background-color: #3d74e5;
+    width: 100%;
+}
+
+.price2 {
+    margin: 0;
+    background-color: rgba(204,45,31,0.58);
+    font-family: Roboto, sans-serif;
+    font-size: 17px;
+    padding: 10px
 }
 
 p.price {

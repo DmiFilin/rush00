@@ -24,8 +24,9 @@ include 'install.php';
                 <form action="" method="get">
                     <input type="image" src="<?php echo $product['img'] ?>" alt="<?php echo $product['name'] ?>" name=" <?php echo $product['name'] ?>" width="310px" height="300px">
                     <br/>
-                    <p class="price">Price: <?php echo $product['price'] ?></p>
-                    <input class="add_product" type="submit" name="submit" value="Add product">
+                    <p class="price2">Price: <?php echo $product['price'] ?></p>
+                    <input class="add_product2" type="submit" name="submit" value="Add product">
+                    <h3>Где-то тут должно быть описание! ляляля</h3>
                 </form>
             </div>
             <?php
