@@ -157,6 +157,36 @@ button.four {
         text-decoration: none;
         color: white;
     }
+    div.products {
+        /*text-align: center;*/
+        display: block;
+        width: 80vw;
+        margin: auto;
+        border: 1px solid black;
+    }
+    div.form {
+        display: inline-block;
+        text-align: center;
+        border: 1px solid green;
+    }
+    div.test {
+        /*display: block;*/
+        text-align: center;
+    }
+    form {
+        display: block;
+    }
+    .form input {
+        font-family: "Roboto", sans-serif;
+        outline: 0;
+        /*background: #f2f2f2;*/
+        /*width: 100%;*/
+        border: 0;
+        margin: 0 0 15px;
+        padding: 15px;
+        box-sizing: border-box;
+        font-size: 14px;
+    }
 </style>
 <body>
 <div class="menu">
@@ -178,25 +208,40 @@ button.four {
         <a href="#"><button class="four">Basket</button></a>
     </div>
 </div>
-<div class="categories">
-    <a href="#"><div class="img">
-<!--        <img src="https://cdnb.artstation.com/p/assets/images/images/014/147/887/large/sere-arena-tr.jpg?1542692072" alt="Boots">-->
-        <div class="name_category">
-            <p class="img_text">One</p>
-        </div>
+<div class="products">
+    <div class="form">
+        <form action="" method="get">
+            <input type="image" src="srcs/img/boots_of_travel.jpg" alt="boots_of_travel" width="300px" height="300px">
+            <br/>
+            <input type="submit" name="submit" value="OK">
+        </form>
     </div>
-    </a>
-    <a href="#"><div class="img">
-        <div class="name_category">
-            <p class="img_text">Two</p>
-        </div>
-    </div></a>
-    <a href="#"><div class="img">
-        <div class="name_category">
-            <p class="img_text">Three</p>
-        </div>
-    </div></a>
+    <div class="form">
+        <form action="" method="get">
+            <input type="image" src="srcs/img/arcane_boots.jpg" alt="boots_of_travel" width="300px" height="300px">
+            <br/>
+            <input type="submit" name="submit" value="OK">
+        </form>
+    </div>
 </div>
+<!--<div class="categories">-->
+<!--    <a href="#"><div class="img">-->
+<!--        <div class="name_category">-->
+<!--            <p class="img_text">One</p>-->
+<!--        </div>-->
+<!--    </div>-->
+<!--    </a>-->
+<!--    <a href="#"><div class="img">-->
+<!--        <div class="name_category">-->
+<!--            <p class="img_text">Two</p>-->
+<!--        </div>-->
+<!--    </div></a>-->
+<!--    <a href="#"><div class="img">-->
+<!--        <div class="name_category">-->
+<!--            <p class="img_text">Three</p>-->
+<!--        </div>-->
+<!--    </div></a>-->
+<!--</div>-->
 </body>
 <footer>
 
