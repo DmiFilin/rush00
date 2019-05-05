@@ -1,6 +1,15 @@
 body {
     background-color: white;
 }
+.basket  table {
+    border-collapse: collapse;
+    width: 100%;
+}
+.basket td {
+    width: 6vmin;
+    box-sizing: border-box;
+    border: 1px solid black;
+}
 div.menu {
     position: fixed;
     z-index: 1;

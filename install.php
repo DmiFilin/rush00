@@ -37,11 +37,36 @@ function admin_del_user($user)
     if ($file_data[$user] != NULL && $file_data[$user] != "") {
         unset($file_data[$user]);
         file_put_contents("../htdocs/private/users", serialize($file_data));
+        return true;
     }
+    return false;
 }
 
 function admin_add_user($login, $passwd, $status)
 {
+    /*
+    $db_init = mysqli_connect("192.168.29.105","root", "272302", "rush_shop");
+    if ($login != NULL && $passwd != NULL)
+    {
+        $result = mysqli_query($db_init, "SELECT id FROM users WHERE login='$login'");
+        $myrow = mysqli_fetch_array($result);
+        if (!empty($myrow['id']))
+            return false;
+        else
+        {
+            $status = ($status == 'on') ? 1: 0;
+            $passwd = hash("gost-crypto", $passwd);
+            $result2 = mysqli_query($db_init, "INSERT INTO users (login,password,a_status) VALUES('$login','$passwd','$status')");
+            if ($result2 == 'TRUE')
+                return true;
+            else
+                return false;
+        }
+    }
+    else
+        return false;
+*/
+
     init_bd();
     if ($login != NULL && $passwd != NULL) {
         $file_data = unserialize(file_get_contents("../htdocs/private/users"));
@@ -60,7 +85,7 @@ function user_create($login, $passwd)
     if ($login != NULL && $login != "" && $passwd != "" && $passwd != NULL)
     {
         $file_data = unserialize(file_get_contents("../htdocs/private/users"));
-        if (in_array($login, $file_data[$login]))
+        if (array_key_exists($login, $file_data))
             return false;
         else
         {
@@ -78,7 +103,7 @@ function check_user_in_db($login)
 {
     init_bd();
     $file_data = unserialize(file_get_contents("../htdocs/private/users"));
-    if (in_array($login, $file_data))
+    if (array_key_exists($login, $file_data))
         return true;
     return false;
 }
@@ -104,9 +129,12 @@ function admin_del_product_from_db($name)
 {
     init_bd();
     $file_data = unserialize(file_get_contents("../htdocs/private/products"));
-    if (in_array($name, $file_data))
+    if (array_key_exists($name, $file_data)) {
         unset($file_data[$name]);
-    file_put_contents("../htdocs/private/products", serialize($file_data));
+        file_put_contents("../htdocs/private/products", serialize($file_data));
+        return true;
+    }
+    return false;
 }
 
 function add_in_basket($product)
@@ -122,10 +150,13 @@ function display_products()
     {
         ?>
         <div class="form">
-            <form action="" method="get">
-                <input type="image" src="<?php echo $product['img'] ?>" alt="<?php echo $product['name'] ?>" width="310px" height="300px">
+            <form action="product.php" method="get">
+                <input type="image" src="<?php echo $product['img'] ?>" alt="<?php echo $product['name'] ?>" name="<?php ?>" width="310px" height="300px">
                 <br/>
                 <p class="price">Price: <?php echo $product['price'] ?></p>
+<!--                <input class="add_product" type="submit" name="submit" value="Add product">-->
+            </form>
+            <form action="" method="get">
                 <input class="add_product" type="submit" name="submit" value="Add product">
             </form>
         </div>

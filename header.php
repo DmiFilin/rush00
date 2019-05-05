@@ -1,3 +1,6 @@
+<?php
+session_start();
+?>
 <header>
 	<div class="menu">
 		<div class="dropdown">
@@ -12,10 +15,16 @@
 			</div>
 		</div>
 		<div class="dropdown">
-			<a href="login.php"><button class="three">Sign in</button></a>
+            <?php
+            if ($_SESSION['loggued_on_user'] == NULL || $_SESSION['loggued_on_user'] == "")
+			    echo ('<a href="login.php"><button class="three">Sign in</button></a>');
+            else {
+                echo('<a href="logout.php"><button class="three">Logout</button></a>');
+            }
+            ?>
 		</div>
 		<div class="dropdown">
-			<a href="#"><button class="four">Basket</button></a>
+			<a href="basket.php"><button class="four">Basket</button></a>
 		</div>
 	</div>
 </header>

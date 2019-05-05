@@ -1,19 +1,36 @@
 <?php
 include 'install.php';
 session_start();
+if ($_SESSION['loggued_on_user'] != "")
+{
+    header('Location: index.php');
+    return ;
+}
 $_SESSION['login_count'] = 0;
 if ($_POST['login'] != NULL && $_POST['passwd'] != NULL)
 {
     $file_data = unserialize(file_get_contents("../htdocs/private/users"));
     $hash = hash("gost-crypto", $_POST['passwd']);
     if ($file_data[$_POST['login']]['login'] == $_POST['login'] && $file_data[$_POST['login']]['passwd'] == $hash) {
-        if ($file_data[$_POST['login']]['status'] != 0)
+        $_SESSION['login'] = $_POST['login'];
+        if ($file_data[$_POST['login']]['status'] != 0) {
+            $_SESSION['is_adm'] = 1;
             header('Location: admin.php');
-        header('Location: index.php');
+            $_SESSION['loggued_on_user'] = "ON";
+            return;
+        } else {
+            header('Location: index.php');
+            $_SESSION['is_adm'] = 0;
+            $_SESSION['loggued_on_user'] = "ON";
+            return;
+        }
     }
-    else
+    else {
         $_SESSION['login_count'] = 1;
+        $_SESSION['is_adm'] = 0;
+    }
 }
+$_SESSION['is_adm'] = 0;
 ?>
 <html lang="en">
 <head>
@@ -33,8 +50,8 @@ if ($_POST['login'] != NULL && $_POST['passwd'] != NULL)
             <?php if ($_SESSION['login_count'] != 0)
                 echo ('<p class="error_message">Incorrect password or login</p>')
                 ?>
-            <p class="message">Not registered? <a href="create.html">Create new account</a></p>
-            <p class="message">Want <a href="modif.html">change password?</a></p>
+            <p class="message">Not registered? <a href="create.php">Create new account</a></p>
+            <p class="message">Want <a href="modif.php">change password?</a></p>
         </form>
     </div>
 </div>

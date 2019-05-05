@@ -6,8 +6,9 @@ init_bd();
 admin_add_products_in_db("boots_of_travel", "100", "srcs/img/boots_of_travel.jpg", "boots");
 admin_add_products_in_db("arcane_boots", "40", "srcs/img/arcane_boots.jpg", "boots");
 admin_add_products_in_db("boots_of_travel", "100", "srcs/img/bootswer", "boots");
+/*
 admin_add_user("admin", "admin", 1);
-admin_add_user("kto", "kto", 0);
+admin_add_user("kto", "kto", 0);*/
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -21,24 +22,6 @@ admin_add_user("kto", "kto", 0);
 <div class="products">
     <?php display_products() ?>
 </div>
-<!--<div class="categories">-->
-<!--    <a href="#"><div class="img">-->
-<!--        <div class="name_category">-->
-<!--            <p class="img_text">One</p>-->
-<!--        </div>-->
-<!--    </div>-->
-<!--    </a>-->
-<!--    <a href="#"><div class="img">-->
-<!--        <div class="name_category">-->
-<!--            <p class="img_text">Two</p>-->
-<!--        </div>-->
-<!--    </div></a>-->
-<!--    <a href="#"><div class="img">-->
-<!--        <div class="name_category">-->
-<!--            <p class="img_text">Three</p>-->
-<!--        </div>-->
-<!--    </div></a>-->
-<!--</div>-->
 </body>
 <footer>
 
