@@ -1,33 +1,39 @@
 <?php
-if (!file_exists("../htdocs/private/passwd")) {
-    if (!file_exists("../htdocs")){
-        mkdir("../htdocs/private", 0755, true);
-    }
-    elseif (!file_exists("../htdocs/private"))
-        mkdir("../htdocs/private", 0755, true);
-    file_put_contents("../htdocs/private/passwd", "");
-}
-$file_data = unserialize(file_get_contents("../htdocs/private/passwd"));
-if ($_POST['login'] != NULL && $_POST['passwd'] != NULL && $_POST['submit'] == "OK")
+include 'functions.php';
+session_start();
+$error = 0;
+if ($_POST['login'] != NULL && $_POST['passwd'] != NULL)
 {
-    $hash = hash("gost-crypto", $_POST['passwd']);
-    if ($file_data[$_POST['login']] != NULL && $file_data[$_POST['login']]['passwd'] != $hash)
-        echo("ERROR\n");
-    elseif (!$file_data[$_POST['login']])
-    {
-        $file_data[$_POST['login']]['login'] = $_POST['login'];
-        $file_data[$_POST['login']]['passwd'] = $hash;
-        $new = serialize($file_data);
-        file_put_contents("../htdocs/private/passwd", $new);
-        header('Location: index.php');
-        echo("OK\n");
+    if (user_create($_POST['login'], $_POST['passwd']) == true) {
+        header('Location: login.php');
+        return;
     }
-    elseif ($file_data[$_POST['login']]['login'] == $_POST['login'])
-    {
-        echo ("ERROR\n");
+    else {
+        $error = 1;
     }
-}
-else {
-    echo("ERROR\n");
 }
 ?>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Chat</title>
+    <link rel="stylesheet" href="login.css" type="text/css">
+    <link rel="stylesheet" href="style.css" type="text/css">
+</head>
+<?php require "header.php"; ?>
+<body>
+<div class="window">
+    <div class="form">
+        <form class="register_form" method="post" action="create.php">
+            <h3>Registration</h3>
+            <input type="text" name="login" value="" placeholder="login">
+            <input type="password" name="passwd" value="" placeholder="password">
+            <input class="sss" type="submit" name="submit" value="OK">
+            <?php if ($error != 0)
+                echo ('<p class="error_message">Forbidden login</p>')
+            ?>
+        </form>
+    </div>
+</div>
+</body>
+</html>
