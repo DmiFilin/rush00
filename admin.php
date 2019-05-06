@@ -33,16 +33,6 @@ elseif ($_POST['name'] != NULL && $_POST['submit'] == "Delete product"){
     else
         $_SESSION['success'] = 4;
 }
-<<<<<<< HEAD
-elseif ($_POST['name'] != NULL && $_POST['submit'] == "Modify product")
-		$_SESSION['status'] = 1;
-elseif ($_POST['name'] != NULL && $_POST['submit'] == "Modify user")
-		$_SESSION['status'] = 1;
-elseif ( $_POST['submit'] == "Modif user")
-    modif_user();
-elseif ( $_POST['submit'] == "Modif product")
-	check_product();
-=======
 elseif ($_POST['name'] != NULL && $_POST['submit'] == "Modify product"){
 	if (check_product($_POST['name'])){
 		$_SESSION['status'] = 1;
@@ -74,7 +64,6 @@ elseif ( $_POST['submit'] == "Modif product"){
 	admin_modif_product($_POST['name'], $_POST['img'], $_POST['price'], $_POST['category'], $_POST['count']);
 }
 
->>>>>>> 77b78b767592507b74c1b9d092f8381a441fd580
 ?>
 <html lang="en">
 <head>
@@ -111,10 +100,6 @@ elseif ( $_POST['submit'] == "Modif product"){
 		border: 0;
 		margin: 0 0 15px;
 		padding: 15px;
-<<<<<<< HEAD
-		/*box-sizing: border-box;*/
-=======
->>>>>>> 77b78b767592507b74c1b9d092f8381a441fd580
 		font-size: 14px;
 	}
 	input.sss {
