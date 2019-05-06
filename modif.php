@@ -1,17 +1,21 @@
 <?php
-include 'install.php';
+include 'functions.php';
 session_start();
 $error = 0;
-$file_data = unserialize(file_get_contents("../htdocs/private/users"));
-if ($_POST['login'] != NULL && $_POST['oldpw'] != NULL && $_POST['newpw'] != NULL && $_POST['submit'] == "OK")
+if ($_POST['login'] && $_POST['login'] == $_SESSION['login'] && $_POST['oldpw'] && $_POST['newpw'] && $_POST['submit'] == "OK")
 {
     $hash = hash("gost-crypto", $_POST['oldpw']);
-    if ($file_data[$_POST['login']] != NULL && $file_data[$_POST['login']]['passwd'] == $hash)
+    $login = $_POST['login'];
+    $db_init = bd_init();
+    $result = mysqli_query($db_init, "SELECT login,password FROM users WHERE login='$login'");
+	$myrow = mysqli_fetch_array($result);
+	mysqli_close($db_init);
+    if ($myrow['password'] == $hash)
     {
         $new_pass = hash("gost-crypto", $_POST['newpw']);
-        $file_data[$_POST['login']]['passwd'] = $new_pass;
-        $new = serialize($file_data);
-        file_put_contents("../htdocs/private/users", $new);
+        $db_init = bd_init();
+        $result = mysqli_query($db_init, "UPDATE users SET password='$new_pass' WHERE login='$login'");
+        mysqli_close($db_init);
         header('Location: login.php');
         return;
     }

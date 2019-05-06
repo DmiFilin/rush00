@@ -1,14 +1,7 @@
 <?php
-include 'install.php';
+include 'functions.php';
 session_start();
-init_bd();
-//admin_del_product_from_db("boots_of_travel");
-admin_add_products_in_db("boots_of_travel", "100", "srcs/img/boots_of_travel.jpg", "boots");
-admin_add_products_in_db("arcane_boots", "40", "srcs/img/arcane_boots.jpg", "boots");
-admin_add_products_in_db("boots_of_travel", "100", "srcs/img/bootswer", "boots");
-/*
-admin_add_user("admin", "admin", 1);
-admin_add_user("kto", "kto", 0);*/
+
 ?>
 <!DOCTYPE html>
 <html lang="en">

@@ -1,5 +1,5 @@
 <?php
-include 'install.php';
+include 'functions.php';
 session_start();
 $_SESSION['error'] = 0;
 $_SESSION['success'] = 0;
@@ -33,6 +33,7 @@ elseif ($_POST['name'] != NULL && $_POST['submit'] == "Delete product"){
     else
         $_SESSION['success'] = 4;
 }
+<<<<<<< HEAD
 elseif ($_POST['name'] != NULL && $_POST['submit'] == "Modify product")
 		$_SESSION['status'] = 1;
 elseif ($_POST['name'] != NULL && $_POST['submit'] == "Modify user")
@@ -41,6 +42,39 @@ elseif ( $_POST['submit'] == "Modif user")
     modif_user();
 elseif ( $_POST['submit'] == "Modif product")
 	check_product();
+=======
+elseif ($_POST['name'] != NULL && $_POST['submit'] == "Modify product"){
+	if (check_product($_POST['name'])){
+		$_SESSION['status'] = 1;
+		$db_init = bd_init();
+		$name = $_POST['name'];
+		$result = mysqli_query($db_init, "SELECT id FROM products WHERE name='$name'");
+		$myrow = mysqli_fetch_array($result);
+		setcookie('prod_mod_id', $myrow['id']);
+		mysqli_close($db_init);
+	}
+}
+elseif ($_POST['login'] != NULL && $_POST['submit'] == "Modify user"){
+	if (check_user($_POST['login'])){
+		$_SESSION['status2'] = 1;
+		$db_init = bd_init();
+		$login = $_POST['login'];
+		$result = mysqli_query($db_init, "SELECT id FROM users WHERE login='$login'");
+		$myrow = mysqli_fetch_array($result);
+		setcookie('user_mod_id', $myrow['id']);
+		mysqli_close($db_init);
+	}
+}
+elseif ( $_POST['submit'] == "Modif user"){
+
+	admin_modif_user($_POST['login'], $_POST['passwd'], $_POST['status']);
+}
+elseif ( $_POST['submit'] == "Modif product"){
+
+	admin_modif_product($_POST['name'], $_POST['img'], $_POST['price'], $_POST['category'], $_POST['count']);
+}
+
+>>>>>>> 77b78b767592507b74c1b9d092f8381a441fd580
 ?>
 <html lang="en">
 <head>
@@ -77,7 +111,10 @@ elseif ( $_POST['submit'] == "Modif product")
 		border: 0;
 		margin: 0 0 15px;
 		padding: 15px;
+<<<<<<< HEAD
 		/*box-sizing: border-box;*/
+=======
+>>>>>>> 77b78b767592507b74c1b9d092f8381a441fd580
 		font-size: 14px;
 	}
 	input.sss {

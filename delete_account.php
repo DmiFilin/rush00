@@ -1,21 +1,15 @@
 <?php
-include 'install.php';
+include 'functions.php';
 session_start();
 $error = 0;
-$file_data = unserialize(file_get_contents("../htdocs/private/users"));
-if ($_POST['login'] != NULL && $_POST['submit'] == "OK")
-{
-	if ($file_data[$_POST['login']] != NULL)
-	{
-		admin_del_user($_POST['login']);
-		$_SESSION['loggued_on_user'] = "";
-		$_SESSION['is_adm'] = 0;
-		header('Location: index.php');
-		return;
-	}
-	else
-		$error = 1;
+if ($_POST['login'] != NULL && $_POST['login'] == $_SESSION['login'] && $_POST['submit'] == "OK"){
+	admin_del_user($_POST['login']);
+	include('logout.php');
+	$_SESSION['login'] = "";
+	header('Location: index.php');
 }
+else if ($_POST['login'])
+	$error = 1;
 ?>
 <html lang="en">
 <head>

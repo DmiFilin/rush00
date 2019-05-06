@@ -1,5 +1,5 @@
 <?php
-include 'install.php';
+include 'functions.php';
 session_start();
 if ($_SESSION['loggued_on_user'] != "")
 {
@@ -7,13 +7,12 @@ if ($_SESSION['loggued_on_user'] != "")
     return ;
 }
 $_SESSION['login_count'] = 0;
-if ($_POST['login'] != NULL && $_POST['passwd'] != NULL)
+if ($_POST['login']  && $_POST['passwd'] )
 {
-    $file_data = unserialize(file_get_contents("../htdocs/private/users"));
-    $hash = hash("gost-crypto", $_POST['passwd']);
-    if ($file_data[$_POST['login']]['login'] == $_POST['login'] && $file_data[$_POST['login']]['passwd'] == $hash) {
+    if (auth($_POST['login'], $_POST['passwd']))
+    {
         $_SESSION['login'] = $_POST['login'];
-        if ($file_data[$_POST['login']]['status'] != 0) {
+        if (check_admin($_SESSION['login'])){
             $_SESSION['is_adm'] = 1;
             header('Location: admin.php');
             $_SESSION['loggued_on_user'] = "ON";
@@ -43,7 +42,7 @@ $_SESSION['is_adm'] = 0;
 <body>
 <div class="window">
     <div class="form">
-        <form class="register_form" method="post" action="login.php">
+        <form class="register_form" method="POST" action="login.php">
             <input type="text" name="login" value="" placeholder="login">
             <input type="password" name="passwd" value="" placeholder="password">
             <input class="sss" type="submit" name="submit" value="OK">

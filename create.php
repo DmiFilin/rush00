@@ -1,5 +1,5 @@
 <?php
-include 'install.php';
+include 'functions.php';
 session_start();
 $error = 0;
 if ($_POST['login'] != NULL && $_POST['passwd'] != NULL)

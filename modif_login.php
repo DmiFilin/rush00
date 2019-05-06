@@ -1,17 +1,31 @@
 <?php
-include 'install.php';
+include 'functions.php';
 session_start();
 $error = 0;
-$file_data = unserialize(file_get_contents("../htdocs/private/users"));
 if ($_POST['login'] != NULL && $_POST['newlogin'] != NULL && $_POST['submit'] == "OK")
 {
-	if ($file_data[$_POST['login']] != NULL)
+	$login = $_POST['login'];
+	$db_init = bd_init();
+    $result = mysqli_query($db_init, "SELECT id,login,password FROM users WHERE login='$login'");
+	$myrow = mysqli_fetch_array($result);
+	$id = $myrow['id'];
+	mysqli_close($db_init);
+	if ($id && $_SESSION['login'] == $_POST['login'])
 	{
-		$file_data[$_POST['login']]['login'] = $_POST['newlogin'];
-		$new = serialize($file_data);
-		file_put_contents("../htdocs/private/users", $new);
-		header('Location: login.php');
-		return;
+		$db_init = bd_init();
+		$new_login = $_POST['newlogin'];
+		$result2 = mysqli_query($db_init, "SELECT id FROM users WHERE login='$new_login'");
+		$check = mysqli_fetch_array($result2);
+		if (!$check['id'])
+		{
+			$result3 = mysqli_query($db_init, "UPDATE users SET login='$new_login' WHERE id='$id'");
+			$_SESSION['login'] = $_POST['newlogin'];
+			mysqli_close($db_init);
+			header('Location: login.php');
+			return;
+		}
+		$error = 1;
+		mysqli_close($db_init);
 	}
 	else
 		$error = 1;

@@ -1,6 +1,6 @@
 <?php
 session_start();
-include 'install.php';
+include 'functions.php';
 ?>
 <html lang="en">
 <head>
@@ -14,11 +14,11 @@ include 'install.php';
 <br />
 <br />
 <?php
-    init_bd();
-    $name = substr(key($_GET), 0, -2);
-    $file_data = unserialize(file_get_contents("../htdocs/private/products"));
-    foreach ($file_data as $product) {
-        if ($name == $product['name']) {
+            $name = $_GET['link'];
+            $db_init = bd_init();
+            $result = mysqli_query($db_init, "SELECT name, img, price, category, description FROM products WHERE name='$name'");
+            $product = mysqli_fetch_array($result);
+            mysqli_close($db_init);
             ?>
             <div style="margin: auto; border: 1px solid black; width: 60%; text-align: center; height: 50%">
                 <form action="" method="get">
@@ -26,12 +26,8 @@ include 'install.php';
                     <br/>
                     <p class="price2">Price: <?php echo $product['price'] ?></p>
                     <input class="add_product2" type="submit" name="submit" value="Add product">
-                    <h3>Где-то тут должно быть описание! ляляля</h3>
+                    <h3><?php echo $product['description']?></h3>
                 </form>
             </div>
-            <?php
-        }
-    }
-?>
 </body>
 </html>
