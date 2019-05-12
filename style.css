@@ -1,5 +1,6 @@
 body {
     background-color: white;
+
 }
 .basket  table {
     border-collapse: collapse;
@@ -204,6 +205,13 @@ form {
 p.price {
     margin: 0;
     background-color: rgba(204,45,31,0.58);
+    font-family: Roboto, sans-serif;
+}
+p.name {
+    margin: 0;
+    padding: 15px;
+    font-size: 17px;
+    background-color: whitesmoke;
     font-family: Roboto, sans-serif;
 }
 input.add_product {

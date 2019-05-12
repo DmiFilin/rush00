@@ -22,7 +22,7 @@ elseif ($_POST['login'] != NULL && $_POST['submit'] == "Delete user") {
         $_SESSION['success'] = 2;
 }
 elseif ($_POST['name'] != NULL && $_POST['price'] != NULL && $_POST['img'] != NULL && $_POST['submit'] == "Add product") {
-    if (admin_add_products_in_db($_POST['name'],  $_POST['price'],  $_POST['img'], $_POST['category'], $_POST['count']) === false)
+    if (admin_add_products_in_db($_POST['name'],  $_POST['price'],  $_POST['img'], $_POST['category'], $_POST['count'], $_POST['description']) === false)
         $_SESSION['error'] = 3;
     else
         $_SESSION['success'] = 3;
@@ -38,30 +38,41 @@ elseif ($_POST['name'] != NULL && $_POST['submit'] == "Modify product"){
 		$_SESSION['status'] = 1;
 		$db_init = bd_init();
 		$name = $_POST['name'];
-		$result = mysqli_query($db_init, "SELECT id FROM products WHERE name='$name'");
+		$result = mysqli_query($db_init,
+		"SELECT id, name, img, price, category, count, description FROM products WHERE name='$name'");
 		$myrow = mysqli_fetch_array($result);
 		setcookie('prod_mod_id', $myrow['id']);
 		mysqli_close($db_init);
 	}
+	else
+		$_SESSION['error'] = 6;
 }
 elseif ($_POST['login'] != NULL && $_POST['submit'] == "Modify user"){
 	if (check_user($_POST['login'])){
 		$_SESSION['status2'] = 1;
 		$db_init = bd_init();
 		$login = $_POST['login'];
-		$result = mysqli_query($db_init, "SELECT id FROM users WHERE login='$login'");
-		$myrow = mysqli_fetch_array($result);
-		setcookie('user_mod_id', $myrow['id']);
+		$result = mysqli_query($db_init, "SELECT id,login,status FROM users WHERE login='$login'");
+		$user_row = mysqli_fetch_array($result);
+		setcookie('user_mod_id', $user_row['id']);
 		mysqli_close($db_init);
 	}
+	else
+		$_SESSION['error'] = 5;
 }
 elseif ( $_POST['submit'] == "Modif user"){
 
-	admin_modif_user($_POST['login'], $_POST['passwd'], $_POST['status']);
+	if (admin_modif_user($_POST['login'], $_POST['passwd'], $_POST['status']) === false)
+		$_SESSION['error'] = 5;
+	else
+		$_SESSION['success'] = 5;
 }
 elseif ( $_POST['submit'] == "Modif product"){
 
-	admin_modif_product($_POST['name'], $_POST['img'], $_POST['price'], $_POST['category'], $_POST['count']);
+	if (admin_modif_product($_POST['name'], $_POST['img'], $_POST['price'], $_POST['category'], $_POST['count'], $_POST['description']) === false)
+		$_SESSION['error'] = 6;
+	else
+		$_SESSION['success'] = 6;
 }
 
 ?>
@@ -74,6 +85,29 @@ elseif ( $_POST['submit'] == "Modif product"){
 	body {
 		background-color: #5386ec;
 	}
+	.main_page {
+		display: inline-block;
+	}
+	.main_page input{
+		font-family: "Roboto", sans-serif;
+		width: 100px;
+		height: 40px;
+		background-color: #f2f2f2;
+		border-radius: 5px;
+		padding: 10px;
+	}
+	.out {
+		display: inline-block;
+		float: right;
+	}
+	.out input{
+		font-family: "Roboto", sans-serif;
+		width: 100px;
+		height: 40px;
+		background-color: #f2f2f2;
+		border-radius: 5px;
+		padding: 10px;
+	}
 	div.window {
 		display: block;
 		text-align: center;
@@ -85,9 +119,10 @@ elseif ( $_POST['submit'] == "Modif product"){
 	div.form {
 		position: relative;
 		display: inline-block;
+		vertical-align: bottom;
 		background: white;
 		max-width: 360px;
-		margin: 0 auto 50px;
+		margin: 0 auto 15px;
 		padding: 15px;
 		text-align: center;
 		box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2), 0 5px 5px 0 rgba(0, 0, 0, 0.24);
@@ -129,10 +164,10 @@ elseif ( $_POST['submit'] == "Modif product"){
     }
 </style>
 <body>
-<form action="logout.php" method="post">
+<form class="out" action="logout.php" method="post">
     <input type="submit" name="logout" value="logout">
 </form>
-<form action="index.php" method="post">
+<form class="main_page" action="index.php" method="post">
     <input type="submit" name="main" value="main">
 </form>
 <div class="window">
@@ -164,24 +199,27 @@ elseif ( $_POST['submit'] == "Modif product"){
                 ?>
 			</form>
 		</div>
-		<?php if ($_SESSION['status2'] == 0)
-			echo (' <div class="form">
-            <form class="register_form" method="post" action="admin.php">
-                <h1>Modify user</h1>
-                <input type="text" name="login" value="" placeholder="login">
-                <input class="sss" type="submit" name="submit" value="Modify user">
-            </form>
-        </div>');
-        elseif ($_SESSION['status2'] == 1)
-			echo ('<div class="form">
-			<form class="register_form" method="post" action="admin.php">
-				<h1>Modify user</h1>
-				<input type="text" name="login" value="" placeholder="login">
-				<input type="password" name="passwd" value="" placeholder="password">
-				<input type="text" name="status" value="" placeholder="status">
-				<input class="sss" type="submit" name="submit" value="Modif user">
-			</form>
-		</div>');
+		<?php if ($_SESSION['status2'] == 0){
+					echo (' <div class="form">
+					<form class="register_form" method="post" action="admin.php">
+						<h1>Modify user</h1>
+						<input type="text" name="login" value="" placeholder="login">
+						<input class="sss" type="submit" name="submit" value="Modify user">');
+					if ($_SESSION['error'] == 5)
+						echo ("<p class='error_message'>Error</p>\n</form>\n</div>");
+					elseif ($_SESSION['success'] == 5)
+						echo ("<p class='success'>Success</p>\n</form>\n</div>");
+				}
+				elseif ($_SESSION['status2'] == 1)
+					echo ('<div class="form">
+					<form class="register_form" method="post" action="admin.php">
+						<h1>Modify user</h1>
+						<input type="text" name="login" value="'.$user_row['login'].'" placeholder="login">
+						<input type="password" name="passwd" value="" placeholder="password">
+						<input type="text" name="status" value="'.$user_row['status'].'" placeholder="status">
+						<input class="sss" type="submit" name="submit" value="Modif user">
+					</form>
+				</div>');
 		?>
 	</div>
 	<br />
@@ -193,15 +231,15 @@ elseif ( $_POST['submit'] == "Modif product"){
 				<input type="text" name="name" value="" placeholder="name">
 				<input type="text" name="price" value="" placeholder="price">
 				<input type="text" name="img" value="" placeholder="img">
-                <input type="text" name="category" value="" placeholder="category">
+				<input type="text" name="category" value="" placeholder="category">
 				<input type="text" name="count" value="" placeholder="count">
-                <input type="text" name="description" value="" placeholder="description">
+				<input type="text" name="description" value="" placeholder="description">
 				<input class="sss" type="submit" name="submit" value="Add product">
-                <?php if ($_SESSION['error'] == 3)
-                    echo ('<p class="error_message">Error</p>');
-                elseif ($_SESSION['success'] == 3)
-                    echo ('<p class="success">Success</p>');
-                ?>
+				<?php if ($_SESSION['error'] == 3)
+					echo ('<p class="error_message">Error</p>');
+				elseif ($_SESSION['success'] == 3)
+					echo ('<p class="success">Success</p>');
+				?>
 			</form>
 		</div>
 		<div class="form">
@@ -209,34 +247,38 @@ elseif ( $_POST['submit'] == "Modif product"){
 				<h1>Delete product</h1>
 				<input type="text" name="name" value="" placeholder="name">
 				<input class="sss" type="submit" name="submit" value="Delete product">
-                <?php if ($_SESSION['error'] == 4)
-                    echo ('<p class="error_message">Error</p>');
-                elseif ($_SESSION['success'] == 4)
-                    echo ('<p class="success">Success</p>');
-                ?>
+				<?php if ($_SESSION['error'] == 4)
+					echo ('<p class="error_message">Error</p>');
+				elseif ($_SESSION['success'] == 4)
+					echo ('<p class="success">Success</p>');
+				?>
 			</form>
 		</div>
-		<?php if ($_SESSION['status'] == 0)
-			echo (' <div class="form">
-            <form class="register_form" method="post" action="admin.php">
-                <h1>Modify product</h1>
-                <input type="text" name="name" value="" placeholder="name">
-                <input class="sss" type="submit" name="submit" value="Modify product">
-            </form>
-        </div>');
-        elseif ($_SESSION['status'] == 1)
-			echo ('<div class="form">
-			<form class="register_form" method="post" action="admin.php">
-				<h1>Modify product</h1>
-				<input type="text" name="name" value="" placeholder="name">
-				<input type="text" name="price" value="" placeholder="price">
-				<input type="text" name="img" value="" placeholder="img">
-                <input type="text" name="category" value="" placeholder="category">
-				<input type="text" name="count" value="" placeholder="count">
-                <input type="text" name="description" value="" placeholder="description">
-				<input class="sss" type="submit" name="submit" value="Modif product">
-			</form>
-		</div>');
+		<?php if ($_SESSION['status'] == 0){
+					echo (' <div class="form">
+					<form class="register_form" method="post" action="admin.php">
+						<h1>Modify product</h1>
+						<input type="text" name="name" value="" placeholder="name">
+						<input class="sss" type="submit" name="submit" value="Modify product">');
+						if ($_SESSION['error'] == 6)
+							echo ("<p class='error_message'>Error</p>\n</form>\n</div>");
+						elseif ($_SESSION['success'] == 6)
+							echo ("<p class='success'>Success</p>\n</form>\n</div>");
+				}
+				elseif ($_SESSION['status'] == 1){
+					echo ('<div class="form">
+					<form class="register_form" method="post" action="admin.php">
+						<h1>Modify product</h1>
+						<input type="text" name="name" value="'.$myrow['name'].'" placeholder="name">
+						<input type="text" name="price" value="'.$myrow['price'].'" placeholder="price">
+						<input type="text" name="img" value="'.$myrow['img'].'" placeholder="img">
+						<input type="text" name="category" value="'.$myrow['category'].'" placeholder="category">
+						<input type="text" name="count" value="'.$myrow['count'].'" placeholder="count">
+						<input type="text" name="description" value="'.$myrow['description'].'" placeholder="description">
+						<input class="sss" type="submit" name="submit" value="Modif product">
+						</form>
+					</div>');
+				}
 		?>
 	</div>
 </div>

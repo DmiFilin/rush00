@@ -23,7 +23,7 @@ else if ($_POST['login'])
 <div class="window">
 	<div class="form">
 		<form class="register_form" method="post" action="delete_account.php">
-			<input type="text" name="login" value="" placeholder="login">
+			<input type="text" name="login" value="<?php echo $_SESSION['login']?>" placeholder="login">
 			<input class="sss" type="submit" name="submit" value="OK">
 			<?php if ($error != 0)
 				echo ('<p class="error_message">Forbidden login</p>')

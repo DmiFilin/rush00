@@ -101,7 +101,7 @@ function user_create($login, $passwd)
 	}
 }
 
-function admin_add_products_in_db($name, $price, $img, $category, $count)
+function admin_add_products_in_db($name, $price, $img, $category, $count, $desc)
 {
 	if ($name && $price && $img && $category && $count)
 	{
@@ -114,7 +114,8 @@ function admin_add_products_in_db($name, $price, $img, $category, $count)
 		}
 		else
 		{
-			$result2 = mysqli_query($db_init, "INSERT INTO products (name, img, price, category, count) VALUES('$name', '$img', '$price', '$category', '$count')");
+			$result2 = mysqli_query($db_init,
+			"INSERT INTO products (name, img, price, category, count, description) VALUES('$name', '$img', '$price', '$category', '$count', '$desc')");
 			mysqli_close($db_init);
 			if ($result2 == 'TRUE')
 				return true;
@@ -167,7 +168,7 @@ function display_products()
 	$arr = array();
 	$result = mysqli_query($db_init, "SELECT id, name, img, price, category, count FROM products");
 	while ($arr = mysqli_fetch_array($result))
-		$file_data[] =$arr;
+		$file_data[] = $arr;
 	mysqli_close($db_init);
     foreach ($file_data as $product)
     {
@@ -175,8 +176,8 @@ function display_products()
         <div class="form">
             <form action="product.php" method="get">
 				<input type="hidden" name="link" value="<?php echo $product['name'] ?>">
-				<input type="image" src="<?php echo $product['img'] ?>" alt="<?php echo $product['name'] ?>" width="310px" height="300px" name="<?php echo $product['name']?>">
-                <br/>
+				<input type="image" src="<?php echo $product['img'] ?>" alt="<?php echo $product['name'] ?>" width="310px" height="300px">
+				<p class="name"><?php echo $product['name'] ?></p>
                 <p class="price">Price: <?php echo $product['price'] ?></p>
             </form>
             <!-- <form action="" method="get">
@@ -232,13 +233,14 @@ function check_user($login)
 	return true;
 }
 
-function admin_modif_product($p_name, $p_img, $p_price, $p_categ, $p_count)
+function admin_modif_product($p_name, $p_img, $p_price, $p_categ, $p_count, $p_desc)
 {
     if ($p_name && $p_img && $p_price && $p_categ && $p_count)
     {
         $id = $_COOKIE['prod_mod_id'];
         $db_init = bd_init();
-        $result = mysqli_query($db_init, "UPDATE products SET name='$p_name', img='$p_img', price='$p_price', category='$p_categ', count='$p_count' WHERE id='$id'");
+		$result = mysqli_query($db_init,
+		"UPDATE products SET name='$p_name', img='$p_img', price='$p_price', category='$p_categ', count='$p_count', description='$p_desc' WHERE id='$id'");
         mysqli_close($db_init);
     }
     else
@@ -247,14 +249,23 @@ function admin_modif_product($p_name, $p_img, $p_price, $p_categ, $p_count)
 
 function admin_modif_user($u_name, $u_pass, $u_status)
 {
-    if ($u_name && $u_pass && $u_status)
-    {
-        $id = $_COOKIE['user_mod_id'];
-        $db_init = bd_init();
-        $result = mysqli_query($db_init, "UPDATE users SET login='$u_name', password='$u_pass', status='$u_status' WHERE id='$id'");
-        mysqli_close($db_init);
-    }
-    else
-        return false;
+	if ($u_name && $u_pass && $u_status)
+	{
+		$db_init = bd_init();
+		$id = $_COOKIE['user_mod_id'];
+		$result0 = mysqli_query($db_init, "SELECT id FROM users WHERE login='$u_name'");
+		$myrow = mysqli_fetch_array($result0);
+		if (empty($myrow['id']) || $myrow['id'] == $id){
+			$u_pass = hash("gost-crypto", $u_pass);
+			$result = mysqli_query($db_init, "UPDATE users SET login='$u_name', password='$u_pass', status='$u_status' WHERE id='$id'");
+			mysqli_close($db_init);
+		}
+		else{
+			mysqli_close($db_init);
+			return false;
+		}
+	}
+	else
+		return false;
 }
 ?>

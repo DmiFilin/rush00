@@ -22,6 +22,8 @@ if ($_POST['login'] && $_POST['login'] == $_SESSION['login'] && $_POST['oldpw'] 
     else
         $error = 1;
 }
+else if ($_POST['submit'] == "OK")
+    $error = 1;
 ?>
 <html lang="en">
 <head>
@@ -35,12 +37,12 @@ if ($_POST['login'] && $_POST['login'] == $_SESSION['login'] && $_POST['oldpw'] 
 <div class="window">
     <div class="form">
         <form class="register_form" method="post" action="modif.php">
-            <input type="text" name="login" value="" placeholder="login">
+            <input type="text" name="login" value="<?php echo $_SESSION['login']?>" placeholder="login">
             <input type="password" name="oldpw" value="" placeholder="old password">
             <input type="password" name="newpw" value="" placeholder="new password">
             <input class="sss" type="submit" name="submit" value="OK">
             <?php if ($error != 0)
-                echo ('<p class="error_message">Forbidden login</p>')
+                echo ('<p class="error_message">Error</p>')
             ?>
         </form>
     </div>
