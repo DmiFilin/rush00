@@ -61,7 +61,7 @@ button.four {
     /*vertical-align: middle;*/
     width: 100%;
     /*z-index: 1;*/
-    height: 100px;
+    /* height: auto; */
     position: absolute;
     background-color: #f9f9f9;
     box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
@@ -70,7 +70,8 @@ button.four {
 .dropdown-content a {
     /*z-index: 1;*/
     /*margin-top: 20px;*/
-    /*padding-top: 10px;*/
+    padding-top: 5px;
+    padding-bottom: 5px;
     text-decoration: none;
     font-size: 20px;
     font-family: "Roboto", sans-serif;

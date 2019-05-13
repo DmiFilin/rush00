@@ -1,5 +1,5 @@
 <?php
-include 'functions.php';
+include_once 'functions.php';
 session_start();
 $error = 0;
 if ($_POST['login'] && $_POST['login'] == $_SESSION['login'] && $_POST['oldpw'] && $_POST['newpw'] && $_POST['submit'] == "OK")

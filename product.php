@@ -1,6 +1,6 @@
 <?php
 session_start();
-include 'functions.php';
+include_once 'functions.php';
 ?>
 <html lang="en">
 <head>
@@ -40,6 +40,7 @@ include 'functions.php';
         ?>
         <div class="prod">
             <form action="" method="get">
+                <input type="hidden" name="link" value="<?php echo $product['name'] ?>">
                 <input type="image" src="<?php echo $product['img'] ?>" alt="<?php echo $product['name'] ?>" name=" <?php echo $product['name'] ?>" width="310px" height="300px">
                 <br/>
                 <p class="name"><?php echo $product['name'] ?></p>

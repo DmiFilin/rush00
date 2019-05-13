@@ -1,5 +1,5 @@
 <?php
-include 'functions.php';
+include_once 'functions.php';
 session_start();
 $_SESSION['error'] = 0;
 $_SESSION['success'] = 0;
@@ -41,7 +41,7 @@ elseif ($_POST['name'] != NULL && $_POST['submit'] == "Modify product"){
 		$result = mysqli_query($db_init,
 		"SELECT id, name, img, price, category, count, description FROM products WHERE name='$name'");
 		$myrow = mysqli_fetch_array($result);
-		setcookie('prod_mod_id', $myrow['id']);
+		$_SESSION['prod_mod_id'] = $myrow['id'];
 		mysqli_close($db_init);
 	}
 	else
@@ -54,7 +54,7 @@ elseif ($_POST['login'] != NULL && $_POST['submit'] == "Modify user"){
 		$login = $_POST['login'];
 		$result = mysqli_query($db_init, "SELECT id,login,status FROM users WHERE login='$login'");
 		$user_row = mysqli_fetch_array($result);
-		setcookie('user_mod_id', $user_row['id']);
+		$_SESSION['user_mod_id'] = $user_row['id'];
 		mysqli_close($db_init);
 	}
 	else

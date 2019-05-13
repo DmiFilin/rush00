@@ -1,7 +1,6 @@
 <?php
-include 'functions.php';
 session_start();
-
+include_once 'functions.php';
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -13,7 +12,7 @@ session_start();
 <?php require "header.php"; ?>
 <body>
 <div class="products">
-    <?php display_products() ?>
+    <?php display_products($_GET['category']);?>
 </div>
 </body>
 <footer>

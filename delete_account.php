@@ -1,5 +1,5 @@
 <?php
-include 'functions.php';
+include_once 'functions.php';
 session_start();
 $error = 0;
 if ($_POST['login'] != NULL && $_POST['login'] == $_SESSION['login'] && $_POST['submit'] == "OK"){

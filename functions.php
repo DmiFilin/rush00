@@ -1,4 +1,5 @@
 <?php
+session_start();
 
 function bd_init(){
 	$name_base = "rush6";
@@ -162,30 +163,34 @@ function add_in_basket($product)
 
 }
 
-function display_products()
+function display_products($category)
 {
 	$db_init = bd_init();
 	$arr = array();
-	$result = mysqli_query($db_init, "SELECT id, name, img, price, category, count FROM products");
+	if ($category)
+		$result = mysqli_query($db_init, "SELECT id, name, img, price FROM products WHERE category = '$category'");
+	else
+		$result = mysqli_query($db_init, "SELECT id, name, img, price FROM products");
 	while ($arr = mysqli_fetch_array($result))
 		$file_data[] = $arr;
 	mysqli_close($db_init);
-    foreach ($file_data as $product)
-    {
-        ?>
-        <div class="form">
-            <form action="product.php" method="get">
-				<input type="hidden" name="link" value="<?php echo $product['name'] ?>">
-				<input type="image" src="<?php echo $product['img'] ?>" alt="<?php echo $product['name'] ?>" width="310px" height="300px">
-				<p class="name"><?php echo $product['name'] ?></p>
-                <p class="price">Price: <?php echo $product['price'] ?></p>
-            </form>
-            <!-- <form action="" method="get">
-                <input class="add_product" type="submit" name="submit" value="Add product">
-            </form> -->
-        </div>
-		<?php
-	}
+	if ($file_data)
+		foreach ($file_data as $product)
+		{
+			?>
+			<div class="form">
+				<form action="product.php" method="get">
+					<input type="hidden" name="link" value="<?php echo $product['name'] ?>">
+					<input type="image" src="<?php echo $product['img'] ?>" alt="<?php echo $product['name'] ?>" width="310px" height="300px">
+					<p class="name"><?php echo $product['name'] ?></p>
+					<p class="price">Price: <?php echo $product['price'] ?></p>
+				</form>
+				<!-- <form action="" method="get">
+					<input class="add_product" type="submit" name="submit" value="Add product">
+				</form> -->
+			</div>
+			<?php
+		}
 }
 
 function auth($login, $passwd)
@@ -237,7 +242,7 @@ function admin_modif_product($p_name, $p_img, $p_price, $p_categ, $p_count, $p_d
 {
     if ($p_name && $p_img && $p_price && $p_categ && $p_count)
     {
-        $id = $_COOKIE['prod_mod_id'];
+        $id = $_SESSION['prod_mod_id'];
         $db_init = bd_init();
 		$result = mysqli_query($db_init,
 		"UPDATE products SET name='$p_name', img='$p_img', price='$p_price', category='$p_categ', count='$p_count', description='$p_desc' WHERE id='$id'");
@@ -252,7 +257,7 @@ function admin_modif_user($u_name, $u_pass, $u_status)
 	if ($u_name && $u_pass && $u_status)
 	{
 		$db_init = bd_init();
-		$id = $_COOKIE['user_mod_id'];
+		$id = $_SESSION['user_mod_id'];
 		$result0 = mysqli_query($db_init, "SELECT id FROM users WHERE login='$u_name'");
 		$myrow = mysqli_fetch_array($result0);
 		if (empty($myrow['id']) || $myrow['id'] == $id){
@@ -267,5 +272,16 @@ function admin_modif_user($u_name, $u_pass, $u_status)
 	}
 	else
 		return false;
+}
+
+function categ_parce()
+{
+	$db_init = bd_init();
+	$arr = array();
+	$result = mysqli_query($db_init, "SELECT DISTINCT category FROM products");
+	while ($row = mysqli_fetch_array($result))
+		$cat_arr[] = $row[0];
+	mysqli_close($db_init);
+	return $cat_arr;
 }
 ?>
