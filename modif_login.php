@@ -1,5 +1,5 @@
 <?php
-include 'functions.php';
+include_once 'functions.php';
 session_start();
 $error = 0;
 if ($_POST['login'] != NULL && $_POST['newlogin'] != NULL && $_POST['submit'] == "OK")
@@ -30,6 +30,8 @@ if ($_POST['login'] != NULL && $_POST['newlogin'] != NULL && $_POST['submit'] ==
 	else
 		$error = 1;
 }
+else if ($_POST['submit'] == "OK")
+	$error = 1;
 ?>
 <html lang="en">
 <head>
@@ -43,7 +45,7 @@ if ($_POST['login'] != NULL && $_POST['newlogin'] != NULL && $_POST['submit'] ==
 <div class="window">
 	<div class="form">
 		<form class="register_form" method="post" action="modif_login.php">
-			<input type="text" name="login" value="" placeholder="login">
+			<input type="text" name="login" value="<?php echo $_SESSION['login']?>" placeholder="login">
 			<input type="text" name="newlogin" value="" placeholder="newlogin">
 			<input class="sss" type="submit" name="submit" value="OK">
 			<?php if ($error != 0)

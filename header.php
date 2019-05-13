@@ -1,5 +1,6 @@
 <?php
 session_start();
+include_once 'functions.php';
 ?>
 <header>
 	<div class="menu">
@@ -9,9 +10,10 @@ session_start();
 		<div class="dropdown">
 			<button class="two">Categories</button>
 			<div class="dropdown-content">
-				<a href="#">T</a>
-				<a href="#">O</a>
-				<a href="#">P</a>
+			<?php $arr = categ_parce();
+					foreach ($arr as $cat)
+						echo "<a href='index.php?category=$cat'>$cat</a>";
+			?>
 			</div>
 		</div>
 		<div class="dropdown">
@@ -32,11 +34,13 @@ session_start();
 				echo ('<a href="create.php"><button class="three">Create account</button></a>');
 			else {
 				echo('<button class="two">Settings</button>
-            <div class="dropdown-content">
-                <a href="modif.php">change password</a>
-                <a href="modif_login.php">change login</a>
-                <a href="delete_account.php">delete account</a>
-            </div>');
+			<div class="dropdown-content">');
+				if ($_SESSION['is_adm'])
+					echo ('<a href="admin.php">administration</a>');
+				echo('<a href="modif.php">change password</a>
+				<a href="modif_login.php">change login</a>
+				<a href="delete_account.php">delete account</a>
+				</div>');
 			}
 			?>
         </div>
